@@ -2,8 +2,6 @@
   <img src="./frontend/src/assets/images/NovaPlusRaw.png" alt="logo" width="128" height="150" style="border-radius: 24px;"/>
   <h1>PCL.Nova.Plus</h1></div>
 
-# PCL.Nova.Plus
-
 下一代 PCL 启动器，官方版 PCL2 的完全重构，采用 Web 技术和超高速并发的 Go 全新构建，这，就是 PCL.Nova.Plus！
 
 目前，本项目有以下须知需要你查阅：
