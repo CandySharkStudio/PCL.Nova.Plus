@@ -1,4 +1,6 @@
-<div align="center"><img src="./frontend/src/assets/images/NovaPlusRaw.png" alt="Logo" width="386"/></div>
+<div align="center">
+  <img src="./frontend/src/assets/images/NovaPlusRaw.png" alt="logo" width="128" height="150" style="border-radius: 24px;"/>
+  <h1>PCL.Nova.Plus</h1></div>
 
 # PCL.Nova.Plus
 
