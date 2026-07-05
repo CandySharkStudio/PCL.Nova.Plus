@@ -58,7 +58,7 @@
             <MySelectCard title="IPv6 检测">
                 <div class="version-all">
                     <MyNormalButton
-                        style_in="width: 100px; height: 30px; margin-bottom: 10px"
+                        style_in="padding: 0 20px; height: 30px; margin-bottom: 10px"
                         on:click={() => {
                             select_ipv6.set([]);
                             reloadIPv6();

@@ -184,7 +184,7 @@
                         style="display: flex; flex-direction: column; align-items: center; justify-content: center"
                     >
                         <MyNormalButton
-                            style_in="width: 200px; height: 30px"
+                            style_in="padding: 0 20px; height: 30px"
                             on:click={startOAuthLittleSkinLogin}
                             >使用 OAuth 登陆 LittleSkin</MyNormalButton
                         >

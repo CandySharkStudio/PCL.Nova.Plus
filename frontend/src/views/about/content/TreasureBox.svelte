@@ -15,7 +15,6 @@
         unlock_theme,
     } from "../../../store/changeBody";
     import {
-        GetAllCaves,
         GetSelfUniqueAddress,
         OpenCustomURL,
         sleep,
@@ -30,10 +29,8 @@
     import MyTextInput from "../../../component/input/MyTextInput.svelte";
     import {
         WriteConfig,
-        GetConfigIniPath,
         ReadConfig,
         OpenDirectoryDialog,
-        GetOtherIniPath,
         OpenExplorer,
     } from "../../../../wailsjs/go/launcher/ReaderWriter";
     import { onMount } from "svelte";
@@ -62,32 +59,17 @@
     }
     async function changeSavePath(e: CustomEvent) {
         let value = e.detail.value;
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "SavePath",
-            value.toString(),
-        );
+        await WriteConfig("current", "Download", "SavePath", value.toString());
         savePath = value;
     }
     async function changeHeaders(e: CustomEvent) {
         let value = e.detail.value;
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "Headers",
-            value.toString(),
-        );
+        await WriteConfig("current", "Download", "Headers", value.toString());
         headers = value;
     }
     async function changeCookies(e: CustomEvent) {
         let value = e.detail.value;
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "Cookies",
-            value.toString(),
-        );
+        await WriteConfig("current", "Download", "Cookies", value.toString());
         cookies = value;
     }
     async function selectFolder() {
@@ -95,30 +77,13 @@
         if (path == "") {
             return;
         }
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "SavePath",
-            path.toString(),
-        );
+        await WriteConfig("current", "Download", "SavePath", path.toString());
         savePath = path;
     }
     onMount(async () => {
-        headers = await ReadConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "Headers",
-        );
-        savePath = await ReadConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "SavePath",
-        );
-        cookies = await ReadConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "Cookies",
-        );
+        headers = await ReadConfig("current", "Download", "Headers");
+        savePath = await ReadConfig("current", "Download", "SavePath");
+        cookies = await ReadConfig("current", "Download", "Cookies");
     });
     async function dontClick() {
         await messagebox(
@@ -158,7 +123,7 @@
                     "解锁成功！",
                     "恭喜解锁成功主题蒙版！现在你可以正常使用 Nova Plus 的主题啦！",
                 );
-                await WriteConfig(await GetOtherIniPath(), "Unlock", sua, i);
+                await WriteConfig("other", "Unlock", sua, i);
                 unlock_theme.set(true);
             } else {
                 await messagebox(
@@ -167,7 +132,6 @@
                     MSG_ERROR,
                 );
             }
-            // await messagebox("暂不支持", "PCL Nova Plus 暂时无法为除了 Windows 操作系统的系统提供 今日人品，请见谅~")
         } else {
             let str = "";
             if (luck == 100) {
@@ -219,7 +183,7 @@
     let curChange = false;
     let cave =
         "反复点击这里可以查看 PCL.Nova 作者与各位沙雕网友乱七八糟的留言！";
-    const monishuju = GetAllCaves();
+    import monishuju from "../../../store/cave.json";
     async function showCave() {
         let f = false;
         for (let i = 10; i >= 1; i--) {
@@ -262,20 +226,20 @@
     on:outroend={after_leave}
 >
     <MySelectCard title="百宝箱">
-        <div class="proc">
-            <div style="margin: 0 20px; width: calc(100% - 40px)">
+        <div class="version-all">
+            <div style="width: 100%">
                 {#if $dont_click === 0}
                     <MyNormalButton
-                        style_in="border: 1px solid red; color: red; width: 130px; height: 35px"
+                        style_in="border: 1px solid red; color: red; padding: 0 20px; height: 35px"
                         on:click={dontClick}>千万别点</MyNormalButton
                     >
                 {/if}
                 <MyNormalButton
-                    style_in="width: 130px; height: 35px; margin-left: 10px"
+                    style_in="padding: 0 20px; height: 35px; margin-left: 10px"
                     on:click={todayLucky}>今日人品</MyNormalButton
                 >
                 <MyNormalButton
-                    style_in="width: 130px; height: 35px; margin-left: 10px"
+                    style_in="padding: 0 20px; height: 35px; margin-left: 10px"
                     on:click={copyNovaIdentify}>复制 Nova 识别码</MyNormalButton
                 >
             </div>

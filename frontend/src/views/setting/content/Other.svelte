@@ -5,7 +5,6 @@
     import MyRadioButton from "../../../component/button/MyRadioButton.svelte";
     import MyTextInput from "../../../component/input/MyTextInput.svelte";
     import {
-        GetConfigIniPath,
         ReadConfig,
         WriteConfig,
     } from "../../../../wailsjs/go/launcher/ReaderWriter";
@@ -22,7 +21,7 @@
     let proxyType = 1;
     async function changeDownloadSource(source: number) {
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Version",
             "SelectDownloadSource",
             source.toString(),
@@ -32,7 +31,7 @@
     async function changeMaximumThread(e: CustomEvent) {
         let value = e.detail.value;
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Version",
             "ThreadBiggest",
             value.toString(),
@@ -41,28 +40,18 @@
     }
     async function changeProxyUrl(e: CustomEvent) {
         let value = e.detail.value;
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "ProxyUrl",
-            value.toString(),
-        );
+        await WriteConfig("current", "Download", "ProxyUrl", value.toString());
         proxyUrl = value;
     }
     async function changeProxyPort(e: CustomEvent) {
         let value = e.detail.value;
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "ProxyPort",
-            value.toString(),
-        );
+        await WriteConfig("current", "Download", "ProxyPort", value.toString());
         proxyPort = value;
     }
     async function changeProxyUsername(e: CustomEvent) {
         let value = e.detail.value;
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Download",
             "ProxyUsername",
             value.toString(),
@@ -72,7 +61,7 @@
     async function changeProxyPassword(e: CustomEvent) {
         let value = e.detail.value;
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Download",
             "ProxyPassword",
             value.toString(),
@@ -81,7 +70,7 @@
     }
     async function changeProxyType(source: number) {
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Download",
             "ProxyType",
             source.toString(),
@@ -90,48 +79,32 @@
     }
     onMount(async () => {
         let dSrc = parseInt(
-            await ReadConfig(
-                await GetConfigIniPath(),
-                "Version",
-                "SelectDownloadSource",
-            ),
+            await ReadConfig("current", "Version", "SelectDownloadSource"),
         );
         if (!Number.isNaN(dSrc) && dSrc > 0 && dSrc < 4) {
             downloadSource = dSrc;
         }
         let mThr = parseInt(
-            await ReadConfig(
-                await GetConfigIniPath(),
-                "Version",
-                "ThreadBiggest",
-            ),
+            await ReadConfig("current", "Version", "ThreadBiggest"),
         );
         if (!Number.isNaN(mThr) && mThr > 0 && mThr <= 256) {
             maximumThread = mThr;
         }
         let pType = parseInt(
-            await ReadConfig(await GetConfigIniPath(), "Download", "ProxyType"),
+            await ReadConfig("current", "Download", "ProxyType"),
         );
         if (!Number.isNaN(pType) && pType > 0 && mThr <= 3) {
             proxyType = pType;
         }
-        proxyUrl = await ReadConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "ProxyUrl",
-        );
-        proxyPort = await ReadConfig(
-            await GetConfigIniPath(),
-            "Download",
-            "ProxyPort",
-        );
+        proxyUrl = await ReadConfig("current", "Download", "ProxyUrl");
+        proxyPort = await ReadConfig("current", "Download", "ProxyPort");
         proxyUsername = await ReadConfig(
-            await GetConfigIniPath(),
+            "current",
             "Download",
             "ProxyUsername",
         );
         proxyPassword = await ReadConfig(
-            await GetConfigIniPath(),
+            "current",
             "Download",
             "ProxyPassword",
         );

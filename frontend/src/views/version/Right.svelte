@@ -21,10 +21,7 @@
     import MyCardButton from "../../component/button/MyCardButton.svelte";
     import { current_view } from "../../store/changeBody";
     import MyNormalButton from "../../component/button/MyNormalButton.svelte";
-    import {
-        GetConfigIniPath,
-        WriteConfig,
-    } from "../../../wailsjs/go/launcher/ReaderWriter";
+    import { WriteConfig } from "../../../wailsjs/go/launcher/ReaderWriter";
     import { MSG_WARNING, showHint } from "../../store/messagebox";
     import { openExplorer } from "../../store/functions";
     import { inputbox, messagebox } from "../../store/messagebox.js";
@@ -88,12 +85,7 @@
         height += 20;
     }
     async function selectOneVersion(num: number) {
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "MC",
-            "SelectVer",
-            num.toString(),
-        );
+        await WriteConfig("current", "MC", "SelectVer", num.toString());
         current_mc_version_index.set(num);
         current_mc_version_path.set($select_mc_version[num].path);
         current_view.set("home");
@@ -146,7 +138,7 @@
         });
         current_mc_index.set(0);
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "MC",
             "SelectMC",
             $current_mc_index.toString(),

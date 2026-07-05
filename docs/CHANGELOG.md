@@ -2,7 +2,7 @@
 
 # 如果是游戏崩溃问题，请提供你的 `版本 JSON`、`启动参数`、`平台（Windows、macOS、Linux）` 在 Github Issue 上！
 
-# 0.0.18.2
+# 0.0.18.3
 
 ### fix
 
@@ -10,6 +10,7 @@
 2. fix(Launch): 修复了在启动游戏时，Nova 未能正确的替换 Forge 老版本的键值：${primary_jar_name} 键。
 3. fix(RightBottomButton): 调整了右下角的按钮位置，现在应该会显示在 messagebox 的遮罩层下方了！不会在弹出了！
 4. fix(About): 惊喜糖鲨 -> 糖鲨工作室！
+5. fix(Button): 几乎修了所有的按钮，现在按钮应该不是固定宽度了！
 
 ### feat
 
@@ -18,8 +19,24 @@
 3. feat(QualcommTips): 在任何 Windows arm64 版本的 Nova 上，现在默认会弹出是否是高通骁龙处理器的提示了！
     1. 除了高通骁龙处理器是 arm64 以外，还有国产麒麟芯片也是 arm64 架构，但是该架构在 HMCL 上未作提示。。
     2. 现在会弹出一个框框，确认是否安装了 OpenGL 兼容层提示！
-4. feat(EULA): 在刚打开启动器时，会弹出一个框，提示最终用户协议！您需要点击 同意 才能正常使用启动器！
-5. feat(HomePage): 新增了一个 LoadingPickaxe 的示例！
+<!-- 4. feat(EULA): 在刚打开启动器时，会弹出一个框，提示最终用户协议！您需要点击 同意 才能正常使用启动器！ -->
+4. feat(HomePage): 新增了一个 LoadingPickaxe 的示例！
+
+### style
+
+1. style(ConfigPath): 修改了 ConfigPath、OtherPath 的获取，现在只需要在前端输入 "current"、"other" 即可直接获取到当前配置和其他配置了！
+    1. 其中，**其他配置（OtherPath）**应该被隐藏，不应该直接被放在配置文件目录下！
+
+### BREAKING CHANGE
+
+1. 修改了 macOS 和 Linux 的部分配置文件获取路径！这将导致你们的配置文件路径发生变化！（如果你在之前要是登录了账号，或者获取了主题，这个时候请重新激活一遍。。）
+    1. Windows（不变）
+    2. macOS：（CurrentDir 被改到了 ~/Library/Application Support/PCL.Nova/PCL.Nova.ini、OtherDir 被改到了 ~/Library/Application Support/PCL.Nova/Other.ini）
+    3. Linux：（CurrentDir 不变、OtherDir 被改到了 ~/.local/config/PCL.Nova/Other.ini）
+
+# 0.0.18.2
+
+- 已跳过该版本！
 
 ### chore
 

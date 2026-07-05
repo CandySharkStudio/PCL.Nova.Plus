@@ -35,7 +35,7 @@ func GetOtherDir() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return currentUser.HomeDir, nil
+	return filepath.Join(currentUser.HomeDir, ".local", "config"), nil
 }
 func PingCMD(ip string, timeout time.Duration) *exec.Cmd {
 	return CMD(GetCurrentDir(), "ping", "-c", "1", "-W", fmt.Sprintf("%.0f", timeout.Seconds()), ip)

@@ -10,8 +10,6 @@
     import MyRadioButton from "../../../component/button/MyRadioButton.svelte";
     import { OpenCustomURL } from "../../../store/functions";
     import {
-        GetConfigIniPath,
-        GetOtherIniPath,
         WriteConfig,
         ReadConfig,
     } from "../../../../wailsjs/go/launcher/ReaderWriter";
@@ -19,7 +17,7 @@
     async function changeTheme(index: number) {
         theme_mode.set(index);
         await WriteConfig(
-            await GetOtherIniPath(),
+            "other",
             "Unlock",
             "ThemeMode",
             $theme_mode.toString(),
@@ -28,7 +26,7 @@
     async function toggleDark(is: boolean) {
         dark_mode.set(!is);
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Misc",
             "DarkMode",
             $dark_mode ? "1" : "0",

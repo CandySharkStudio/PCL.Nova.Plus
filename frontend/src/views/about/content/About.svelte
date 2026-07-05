@@ -81,7 +81,7 @@
                 {
                     title: "Github 主页",
                     click: () => {
-                        OpenCustomURL("https://github.com/3TProject");
+                        OpenCustomURL("https://github.com/CandySharkStudio");
                     },
                     icon: `<svg
                                     xmlns="http://www.w3.org/2000/svg"

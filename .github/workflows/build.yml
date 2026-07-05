@@ -2,17 +2,17 @@ name: Wails build
 
 on:
   workflow_dispatch:
-  push:
-    branches: [dev, main]
-    paths:
-      - ".github/workflows/**"
-      - "build/**"
-      - "frontend/**"
-      - "module/**"
-      - "go.mod"
-      - "main.go"
-      - "VERSION"
-      - "wails.json"
+  # push:
+  #   branches: [dev, main]
+  #   paths:
+  #     - ".github/workflows/**"
+  #     - "build/**"
+  #     - "frontend/**"
+  #     - "module/**"
+  #     - "go.mod"
+  #     - "main.go"
+  #     - "VERSION"
+  #     - "wails.json"
 
 env:
   NODE_OPTIONS: "--max-old-space-size=4096"

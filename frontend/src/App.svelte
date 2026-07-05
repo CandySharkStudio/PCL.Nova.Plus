@@ -12,9 +12,7 @@
     } from "./store/changeBody";
     import { onMount } from "svelte";
     import {
-        GetConfigIniPath,
         ReadConfig,
-        GetOtherIniPath,
         WriteConfig,
     } from "../wailsjs/go/launcher/ReaderWriter";
     import {
@@ -56,7 +54,7 @@
     onMount(async () => {
         let ver = await Version();
         launcher_version.set(ver);
-        let d = await ReadConfig(await GetConfigIniPath(), "Misc", "DarkMode");
+        let d = await ReadConfig("current", "Misc", "DarkMode");
         dark_mode.set(
             d == "1"
                 ? true
@@ -66,15 +64,11 @@
         );
         const jt = await GetUniqueAddress();
         if (jt.indexOf("ERR_") === -1) {
-            const l = await ReadConfig(await GetOtherIniPath(), "Unlock", jt);
+            const l = await ReadConfig("other", "Unlock", jt);
             if (await CryptoUnlock(l)) {
                 unlock_theme.set(true);
                 let t = Number(
-                    await ReadConfig(
-                        await GetOtherIniPath(),
-                        "Unlock",
-                        "ThemeMode",
-                    ),
+                    await ReadConfig("other", "Unlock", "ThemeMode"),
                 );
                 theme_mode.set(Number.isNaN(t) || t < 1 || t > 15 ? 1 : t);
             }
@@ -85,38 +79,29 @@
         } else {
             backImage = ``;
         }
-        if (
-            (await ReadConfig(await GetOtherIniPath(), "EULA", "Agree")) !== "1"
-        ) {
-            if (
-                (await messagebox(
+        if ((await ReadConfig("other", "EULA", "Agree")) !== "1") {
+            // 后期添加了 EULA 之后直接改这里就好（
+            while (false) {
+                let answer = await messagebox(
                     "最终用户协议",
                     "虽然 Nova 是纯开源软件！但是你依旧需要遵守一些规定！请参考我们的最终用户协议！",
                     MSG_INFO,
-                    ["阅读并同意", "不同意"],
-                )) === 0
-            ) {
-                OpenCustomURL(
-                    "https://github.com/SupriseCandyShark/PCL.Nova.Plus/blob/main/docs/GUIDELINES.md",
+                    ["阅读", "同意", "不同意"],
                 );
-                await WriteConfig(
-                    await GetOtherIniPath(),
-                    "EULA",
-                    "Agree",
-                    "1",
-                );
-            } else {
-                Quit();
+                if (answer === 0) {
+                    OpenCustomURL(
+                        "https://github.com/SupriseCandyShark/PCL.Nova.Plus/blob/main/docs/GUIDELINES.md",
+                    );
+                } else if (answer === 1) {
+                    await WriteConfig("other", "EULA", "Agree", "1");
+                    break;
+                } else {
+                    Quit();
+                }
             }
         }
         if ((await Operation()) === 2) {
-            if (
-                (await ReadConfig(
-                    await GetOtherIniPath(),
-                    "Arm64",
-                    "CheckWarning",
-                )) !== "1"
-            ) {
+            if ((await ReadConfig("other", "Arm64", "CheckWarning")) !== "1") {
                 let c = await messagebox(
                     "OpenGL 兼容层提示",
                     "检测到您目前处于 Windows arm64 环境！如果您的处理器是 高通 系列处理器，您可能需要下载 OpenGL 兼容层才能正常使用游戏。",
@@ -124,12 +109,7 @@
                     ["我已知晓，不再提示", "我已知晓，并进入网站下载"],
                 );
                 if (c === 0) {
-                    await WriteConfig(
-                        await GetOtherIniPath(),
-                        "Arm64",
-                        "CheckWarning",
-                        "1",
-                    );
+                    await WriteConfig("other", "Arm64", "CheckWarning", "1");
                 }
                 OpenCustomURL("https://apps.microsoft.com/detail/9nqpsl29bfff");
             }

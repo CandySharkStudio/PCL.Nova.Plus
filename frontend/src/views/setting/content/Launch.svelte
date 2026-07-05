@@ -20,7 +20,6 @@
     } from "../../../../wailsjs/go/launcher/LaunchMethod";
     import Java from "../../../assets/images/Icons/Java.png";
     import {
-        GetConfigIniPath,
         OpenFileDialog,
         ReadConfig,
         WriteConfig,
@@ -71,59 +70,34 @@
 
     async function reloadSettings() {
         isIsolation =
-            (await ReadConfig(
-                await GetConfigIniPath(),
-                "Version",
-                "SelectIsolation",
-            )) == "4";
-        customInfo = await ReadConfig(
-            await GetConfigIniPath(),
-            "Version",
-            "CustomInfo",
-        );
+            (await ReadConfig("current", "Version", "SelectIsolation")) == "4";
+        customInfo = await ReadConfig("current", "Version", "CustomInfo");
         let w = parseInt(
-            await ReadConfig(
-                await GetConfigIniPath(),
-                "Document",
-                "WindowWidth",
-            ),
+            await ReadConfig("current", "Document", "WindowWidth"),
         );
         if (!Number.isNaN(w) && w >= 854) {
             winWidth = w;
         }
         let h = parseInt(
-            await ReadConfig(
-                await GetConfigIniPath(),
-                "Document",
-                "WindowHeight",
-            ),
+            await ReadConfig("current", "Document", "WindowHeight"),
         );
         if (!Number.isNaN(h) && h >= 480) {
             winHeight = h;
         }
         additionalJVM = await ReadConfig(
-            await GetConfigIniPath(),
+            "current",
             "Document",
             "AdditionalJVM",
         );
         additionalGame = await ReadConfig(
-            await GetConfigIniPath(),
+            "current",
             "Document",
             "AdditionalGame",
         );
-        let icl = await ReadConfig(
-            await GetConfigIniPath(),
-            "Document",
-            "IsCheckLibraries",
-        );
+        let icl = await ReadConfig("current", "Document", "IsCheckLibraries");
         if (icl == "") {
             isCheckLibraries = true;
-            await WriteConfig(
-                await GetConfigIniPath(),
-                "Document",
-                "IsCheckLibraries",
-                "1",
-            );
+            await WriteConfig("current", "Document", "IsCheckLibraries", "1");
         } else {
             isCheckLibraries = icl == "1";
         }
@@ -132,11 +106,7 @@
         if (totalMemory == 0) {
             totalMemory = await GetTotalMemory();
             currentNum = parseInt(
-                await ReadConfig(
-                    await GetConfigIniPath(),
-                    "Document",
-                    "MaxMemoryLevel",
-                ),
+                await ReadConfig("current", "Document", "MaxMemoryLevel"),
             );
             if (Number.isNaN(currentNum) || currentNum > 32 || currentNum < 0) {
                 currentNum = 24;
@@ -182,7 +152,7 @@
             loading_state = true;
         }
         let javaIndex = parseInt(
-            await ReadConfig(await GetConfigIniPath(), "Java", "SelectJava"),
+            await ReadConfig("current", "Java", "SelectJava"),
         );
         if (
             Number.isNaN(javaIndex) ||
@@ -204,7 +174,7 @@
         if ($current_java_index != index) {
             current_java_index.set(index);
             await WriteConfig(
-                await GetConfigIniPath(),
+                "current",
                 "Java",
                 "SelectJava",
                 index.toString(),
@@ -260,7 +230,7 @@
         currentMemory = Math.round(totalMemory / (33 - num));
         currentNum = num;
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Document",
             "MaxMemoryLevel",
             num.toString(),
@@ -270,7 +240,7 @@
     async function toggleIsolation() {
         isIsolation = !isIsolation;
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Version",
             "SelectIsolation",
             isIsolation ? "4" : "1",
@@ -279,12 +249,7 @@
 
     async function customInfoInput(event: CustomEvent) {
         customInfo = event.detail.value;
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "Version",
-            "CustomInfo",
-            customInfo,
-        );
+        await WriteConfig("current", "Version", "CustomInfo", customInfo);
     }
 
     async function widthInput(event: CustomEvent) {
@@ -292,7 +257,7 @@
         if (!Number.isNaN(v) && v >= 854) {
             winWidth = v;
             await WriteConfig(
-                await GetConfigIniPath(),
+                "current",
                 "Document",
                 "WindowWidth",
                 v.toString(),
@@ -305,7 +270,7 @@
         if (!Number.isNaN(v) && v >= 480) {
             winHeight = v;
             await WriteConfig(
-                await GetConfigIniPath(),
+                "current",
                 "Document",
                 "WindowHeight",
                 v.toString(),
@@ -320,7 +285,7 @@
         }
         additionalGame = additionalGame.trim();
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Document",
             "AdditionalGame",
             additionalGame,
@@ -358,7 +323,7 @@
         }
         additionalJVM = additionalJVM.trim();
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Document",
             "AdditionalJVM",
             additionalJVM,
@@ -368,7 +333,7 @@
         if (num == 1) {
             additionalJVM = value;
             await WriteConfig(
-                await GetConfigIniPath(),
+                "current",
                 "Document",
                 "AdditionalJVM",
                 additionalJVM,
@@ -376,7 +341,7 @@
         } else {
             additionalGame = value;
             await WriteConfig(
-                await GetConfigIniPath(),
+                "current",
                 "Document",
                 "AdditionalJVM",
                 additionalGame,
@@ -386,7 +351,7 @@
     async function changeIsCheckLibraries() {
         isCheckLibraries = !isCheckLibraries;
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Document",
             "IsCheckLibraries",
             isCheckLibraries ? "1" : "0",
@@ -496,14 +461,14 @@
             <MySelectCard title="Java 管理">
                 <div class="version-all">
                     <MyNormalButton
-                        style_in="width: 100px; height: 30px"
+                        style_in="padding: 0 20px; height: 30px"
                         title="让用户手动添加一个 Java，自主选择 java.exe 或者 javaw.exe"
                         on:click={addJava}
                     >
                         手动添加
                     </MyNormalButton>
                     <MyNormalButton
-                        style_in="width: 100px; height: 30px; margin-left: 20px"
+                        style_in="padding: 0 20px; height: 30px; margin-left: 20px"
                         on:click={() => {
                             showHint(
                                 "目前 Java 浅搜索暂时还没有做好😭，请敬请期待吧！",
@@ -514,7 +479,7 @@
                         浅搜索
                     </MyNormalButton>
                     <MyNormalButton
-                        style_in="width: 100px; height: 30px; margin-left: 20px"
+                        style_in="padding: 0 20px; height: 30px; margin-left: 20px"
                         on:click={() => {
                             showHint(
                                 "目前 Java 深搜索暂时还没有做好😭，请敬请期待吧！",

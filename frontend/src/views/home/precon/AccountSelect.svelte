@@ -5,7 +5,6 @@
         current_account_page,
     } from "../../../store/changeBody";
     import {
-        GetOtherIniPath,
         ReadConfig,
         WriteConfig,
     } from "../../../../wailsjs/go/launcher/ReaderWriter";
@@ -27,7 +26,7 @@
         if ($current_account_index != index) {
             current_account_index.set(index);
             await WriteConfig(
-                await GetOtherIniPath(),
+                "Other",
                 "Account",
                 "SelectAccount",
                 index.toString(),
@@ -50,35 +49,25 @@
     }
     onMount(async () => {
         let config = await GetAccountConfig();
-        select_account.set([])
+        select_account.set([]);
         select_account.update((account) => {
-            for(let i = 0; i < config.data.accounts.length; i++) {
+            for (let i = 0; i < config.data.accounts.length; i++) {
                 let acc = config.data.accounts[i];
-                let splitSkin = acc.head_skin.split("**")
-                console.log(splitSkin)
+                let splitSkin = acc.head_skin.split("**");
                 account.push(acc);
-                account[i].innerSkin = splitSkin[0]
+                account[i].innerSkin = splitSkin[0];
                 if (splitSkin.length === 1) {
-                    account[i].outerSkin = ''
-                }else{
-                    account[i].outerSkin = splitSkin[1]
+                    account[i].outerSkin = "";
+                } else {
+                    account[i].outerSkin = splitSkin[1];
                 }
             }
             // Object.assign(account, config.data.accounts);
             return account;
         });
-        let index = await ReadConfig(
-            await GetOtherIniPath(),
-            "Account",
-            "SelectAccount",
-        );
+        let index = await ReadConfig("Other", "Account", "SelectAccount");
         if (!Number(index)) {
-            await WriteConfig(
-                await GetOtherIniPath(),
-                "Account",
-                "SelectAccount",
-                "0",
-            );
+            await WriteConfig("Other", "Account", "SelectAccount", "0");
         }
         current_account_index.set(Number(index));
     });
@@ -122,9 +111,20 @@
                             style_in="margin-left: 5px"
                         />
                         <div class="a-avatar">
-                            <img alt="头像内层" src="data:img/png;base64,{account.innerSkin}" class="inner-skin" style={account.outerSkin !== '' ? "width: 36px; height: 36px; top: 2px; left: 2px; filter: grayscale(0.13);" : 'width: 40px; height: 40px; top: 0; left: 0;'}/>
-                            {#if account.outerSkin !== ''}
-                                <img alt="头像外层" src="data:img/png;base64,{account.outerSkin}" class="outer-skin" />
+                            <img
+                                alt="头像内层"
+                                src="data:img/png;base64,{account.innerSkin}"
+                                class="inner-skin"
+                                style={account.outerSkin !== ""
+                                    ? "width: 36px; height: 36px; top: 2px; left: 2px; filter: grayscale(0.13);"
+                                    : "width: 40px; height: 40px; top: 0; left: 0;"}
+                            />
+                            {#if account.outerSkin !== ""}
+                                <img
+                                    alt="头像外层"
+                                    src="data:img/png;base64,{account.outerSkin}"
+                                    class="outer-skin"
+                                />
                             {/if}
                         </div>
                         <div class="info" style="pointer-events: none">

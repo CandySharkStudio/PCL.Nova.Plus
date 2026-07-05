@@ -13,7 +13,6 @@
     import MyRadioButton from "../../../component/button/MyRadioButton.svelte";
     import MyTextInput from "../../../component/input/MyTextInput.svelte";
     import {
-        GetConfigIniPath,
         ReadConfig,
         WriteConfig,
     } from "../../../../wailsjs/go/launcher/ReaderWriter";
@@ -51,7 +50,7 @@
         isSetting = false;
         select_homepage.set(index);
         await WriteConfig(
-            await GetConfigIniPath(),
+            "current",
             "Misc",
             "SelectHomePage",
             index.toString(),
@@ -66,12 +65,7 @@
         }
         homepage_url.set(text);
         homepage_cache.set("");
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "Misc",
-            "HomePageURL",
-            text,
-        );
+        await WriteConfig("current", "Misc", "HomePageURL", text);
     }
     function control_leave() {
         isTransitioning = true;
@@ -79,12 +73,7 @@
     async function anyHomePageClick(index: number) {
         current_homepage.set(index);
         homepage_cache.set("");
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "Misc",
-            "HomePageValue",
-            index.toString(),
-        );
+        await WriteConfig("current", "Misc", "HomePageValue", index.toString());
     }
     async function loadingHomePage() {
         if ($select_homepage == 1) {
@@ -119,30 +108,18 @@
         await loadingHomePage();
         if ($select_homepage < 0) {
             let index = Number(
-                await ReadConfig(
-                    await GetConfigIniPath(),
-                    "Misc",
-                    "SelectHomePage",
-                ),
+                await ReadConfig("current", "Misc", "SelectHomePage"),
             );
             select_homepage.set(Number(index >= 0 ? index : -1));
         }
         if ($current_homepage < 0) {
             let index = Number(
-                await ReadConfig(
-                    await GetConfigIniPath(),
-                    "Misc",
-                    "HomePageValue",
-                ),
+                await ReadConfig("current", "Misc", "HomePageValue"),
             );
             current_homepage.set(Number(index >= 0 ? index : -1));
         }
         if ($homepage_url == "") {
-            let url = await ReadConfig(
-                await GetConfigIniPath(),
-                "Misc",
-                "HomePageURL",
-            );
+            let url = await ReadConfig("current", "Misc", "HomePageURL");
             homepage_url.set(url);
         }
         onlineValue = $homepage_url;

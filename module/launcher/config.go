@@ -4,7 +4,6 @@ import (
 	"NovaPlus/module/mmcll"
 	"context"
 	"path/filepath"
-	runtime2 "runtime"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"gopkg.in/ini.v1"
@@ -68,12 +67,14 @@ func (config config) Write(section, key, value string) error {
 
 // WriteConfig 写入配置
 func (rw *ReaderWriter) WriteConfig(path, section, key, value string) {
+	path = mmcll.If(path == "current", rw.GetConfigIniPath(), rw.GetOtherIniPath()).(string)
 	conf := NewConfig(path)
 	_ = conf.Write(section, key, value)
 }
 
 // ReadConfig 读取配置
 func (rw *ReaderWriter) ReadConfig(path, section, key string) string {
+	path = mmcll.If(path == "current", rw.GetConfigIniPath(), rw.GetOtherIniPath()).(string)
 	conf := NewConfig(path)
 	if v, err := conf.Read(section, key); err == nil {
 		return v
@@ -87,17 +88,17 @@ func (rw *ReaderWriter) GetOtherIniPath() string {
 	if err != nil {
 		home = GetCurrentDir()
 	}
-	d := mmcll.If(runtime2.GOOS == "windows", []string{"PCL.Nova"}, mmcll.If(runtime2.GOOS == "darwin", []string{"PCL.Nova", "config"}, []string{".PCL.Nova"})).([]string)
-	d = append([]string{home}, d...)
-	d = append(d, "Other.ini")
-	res := filepath.Join(d...)
+	// d := mmcll.If(runtime2.GOOS == "windows", []string{"PCL.Nova"}, mmcll.If(runtime2.GOOS == "darwin", []string{"PCL.Nova"}, []string{"PCL.Nova"})).([]string)
+	// d = append([]string{home}, d...)
+	// d = append(d, "Other.ini")
+	res := filepath.Join(home, "PCL.Nova", "Other.ini")
 	err = EnsureConfigFile(res)
 	return mmcll.If(err != nil, "", res).(string)
 }
 
 // GetConfigIniPath 获取元数据配置（并不隐私，只保存在当前目录下）【ps：macos 的路径与 GetOtherIniPath 毫无两样】
 func (rw *ReaderWriter) GetConfigIniPath() string {
-	res := filepath.Join(GetCurrentDir(), "PCL.Nova", "config", "PCL2.Nova.ini")
+	res := filepath.Join(GetCurrentDir(), "PCL.Nova", "PCL2.Nova.ini")
 	err := EnsureConfigFile(res)
 	return mmcll.If(err != nil, "", res).(string)
 }

@@ -233,22 +233,20 @@
             on:click={() => changeButtonState("about")}
         >
             <svg
-                role="img"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                stroke-width="3"
+                fill="none"
+                stroke="currentColor"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                fill="none"
+                stroke-width="1.5"
                 class={$current_view === "about"
                     ? "active-button-icon"
-                    : "nav-button-icon"}
-            >
+                    : "nav-button-icon"}>
                 <path
-                    d="M9 4C9 2.89543 9.89543 2 11 2C12.1046 2 13 2.89543 13 4V6H18V11H20C21.1046 11 22 11.8954 22 13C22 14.1046 21.1046 15 20 15H18V20H13V18C13 16.8954 12.1046 16 11 16C9.89543 16 9 16.8954 9 18V20H4V15H6C7.10457 15 8 14.1046 8 13C8 11.8954 7.10457 11 6 11H4V6H9V4Z"
-                />
+                    d="M9.917 7.076a.947.947 0 0 1 0 1.326L8.402 9.917a.947.947 0 0 1-1.326 0L4.528 7.37c-.495-.494-1.327-.333-1.446.356a5.682 5.682 0 0 0 6.626 6.554c.82-.15 1.707-.022 2.296.566l5.566 5.567a2.01 2.01 0 1 0 2.842-2.842l-5.567-5.566c-.588-.589-.716-1.477-.566-2.296a5.684 5.684 0 0 0-6.554-6.626c-.689.12-.85.951-.356 1.446z"/>
             </svg>
-            更多
+            工具
         </button>
     </div>
     {#if windowOperation !== 5}
@@ -432,25 +430,19 @@
     .icon-control-button:hover {
         background-color: rgba(0, 0, 0, 0.2);
     }
-
-    .nav-button .nav-button-icon,
-    .active-button .active-button-icon {
-        width: 16px;
-        height: 16px;
-        vertical-align: middle;
-        stroke: white;
-        margin-right: 3px;
-        transition: all 0.2s;
-    }
-
-    .nav-button .active-button-icon,
-    .active-button .active-button-icon {
+    .nav-button-icon,
+    .active-button-icon {
         width: 16px;
         height: 16px;
         vertical-align: middle;
         stroke: var(--light-color);
         margin-right: 3px;
         transition: all 0.2s;
+    }
+    .nav-button-icon,
+    .active-button-icon {
+        position: relative;
+        top: -1px;
     }
 
     #icon-control {

@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
     import MySidebarButton from "../../component/button/MySidebarButton.svelte";
     import {
-        GetConfigIniPath,
         OpenDirectoryDialog,
         ReadConfig,
         WriteConfig,
@@ -43,7 +42,7 @@
                 },
             ]);
         }
-        let m = await ReadConfig(await GetConfigIniPath(), "MC", "SelectMC");
+        let m = await ReadConfig("current", "MC", "SelectMC");
         if (m == "" || parseInt(m) < 0) {
             return;
         }
@@ -51,12 +50,7 @@
         current_mc_index.set(num);
     });
     async function setMCVersionConfig(num: number) {
-        await WriteConfig(
-            await GetConfigIniPath(),
-            "MC",
-            "SelectMC",
-            num.toString(),
-        );
+        await WriteConfig("current", "MC", "SelectMC", num.toString());
         current_mc_index.set(num);
     }
     async function openMCSelectFile() {
